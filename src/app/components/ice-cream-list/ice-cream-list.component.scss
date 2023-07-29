@@ -1,0 +1,81 @@
+@import './../../../assets/styles/variables.scss';
+
+.main-container {
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  .app-title {
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+
+.expandable-row {
+  width: 100%;
+  text-align: center;
+
+  & p {
+    margin: 8px 0;
+  }
+}
+
+.expand-width {
+  width: 8rem;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .flex-label {
+    flex: 0 0 calc(50% - 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 4rem;
+
+    & p {
+      font-size: $font-size-base;
+      font-weight: 700;
+    }
+  }
+
+  .flex-value {
+    flex: 0 0 calc(50% - 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    & p {
+      font-size: $font-size-base;
+      font-weight: 500;
+    }
+  }
+}
+
+/* For smaller screens, adjust the layout */
+@media (max-width: 768px) {
+  .flex-container {
+    .flex-label,
+    .flex-value {
+      flex: 100%; /* Full width for both flex items */
+      padding-right: 0; /* Remove padding on smaller screens */
+      align-items: flex-start;  /* Align items left on smaller screens */
+    }
+  }
+}
+
+.font-large {
+  font-size: $font-size-large;
+}
+
+.app-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px 30px;
+}

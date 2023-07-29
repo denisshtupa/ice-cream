@@ -1,0 +1,19 @@
+.ice-cream-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%
+}
+
+.error-msg {
+  color: red;
+  font-size: 0.75rem;
+}

@@ -14,8 +14,15 @@ export class IceCreamListComponent {
   public CategoryEnum = CategoryEnum; // Expose the CategoryEnum to the template
   public iceCreamFlavors: IIceCreamFlavor[] = [];
 
-  constructor(private iceCreamService: IceCreamService, private dialogService: DialogService) {
-    this.iceCreamFlavors = iceCreamService.getAllIceCreamFlavors();
+  constructor(
+    private iceCreamService: IceCreamService,
+    private dialogService: DialogService
+  ) {
+  }
+
+  ngOnInit() {
+    this.iceCreamFlavors = this.iceCreamService.getAllIceCreamFlavors();
+
   }
 
   getCategorySeverity(status: CategoryEnum){

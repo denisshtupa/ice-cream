@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CategoryEnum } from 'src/app/enums/category.enum';
-import { IIceCreamFlavor } from 'src/app/interfaces/ice-cream.interface';
+import { IIceCreamFlavor, IIceCreamSpecifications } from 'src/app/interfaces/ice-cream.interface';
 import { IceCreamService } from 'src/app/services/ice-cream.service';
 import { availableFlavors, availableFruits, availableIngredients } from 'src/app/shared/constants';
 import { extractSpecifications } from 'src/app/shared/helpers';
@@ -25,16 +26,15 @@ export class IceCreamCreateComponent {
     private dialogRef: DynamicDialogRef,
     private iceCreamService: IceCreamService,
     private formBuilder: FormBuilder,
-    private config: DynamicDialogConfig
+    private ngZone: NgZone,
+    private config: DynamicDialogConfig,
+    private messageService: MessageService
   ) {
     this.numberOfExistingFlavors = config.data.existingFlavorsNumber;
-
     this.initFlavorForm();
   }
 
-  ngOnInit() {
-  }
-
+  // Initialization of flavor form
   private initFlavorForm() {
     this.flavorForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]+$/)]],
@@ -50,62 +50,91 @@ export class IceCreamCreateComponent {
       sellingPrice: ['', [Validators.required, Validators.min(0)]]
     });
 
-    this.flavorForm.get('category').valueChanges.subscribe((category: CategoryEnum) => {
-      this.resetCategoryFields();
-      this.setValidatorsForCategory(category);
+    this.flavorForm.get('category').valueChanges.subscribe({
+      next: () => {
+        this.resetCategoryFields();
+      },
+      complete: () => {
+        const category = this.flavorForm.get('category').value;
+        this.setValidatorsForCategory(category);
+      }
     });
   }
 
-  private resetCategoryFields(): void {
+  // Resets all category related fields to initial state.
+  public resetCategoryFields(): void {
     this.flavorForm.get('creamContent').reset();
     this.flavorForm.get('fruitContent').reset();
     this.flavorForm.get('fruits').reset();
     this.flavorForm.get('flavors').reset();
   }
 
-  private setValidatorsForCategory(category: CategoryEnum): void {
-    if (category === CategoryEnum.CreamIce) {
-      this.flavorForm.get('creamContent').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-    } else {
-      this.flavorForm.get('creamContent').clearValidators();
-    }
+  // Updating validators in case of category change
+  public setValidatorsForCategory(category: CategoryEnum): void {
+    this.ngZone.run(() => {
+      if (category === CategoryEnum.CreamIce) {
+        this.flavorForm.get('creamContent').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        this.flavorForm.get('fruitContent').setValidators(null)
+        this.flavorForm.get('fruits').setValidators(null);
+        this.flavorForm.get('flavors').setValidators(null);
+      } else if (category === CategoryEnum.FruitIce) {
+        this.flavorForm.get('creamContent').setValidators(null);
+        this.flavorForm.get('flavors').setValidators(null);
+        this.flavorForm.get('fruitContent').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        this.flavorForm.get('fruits').setValidators(Validators.required);
+      } else if (category === CategoryEnum.WaterIce) {
+        this.flavorForm.get('creamContent').setValidators(null);
+        this.flavorForm.get('fruitContent').setValidators(null);
+        this.flavorForm.get('fruits').setValidators(null);
+        this.flavorForm.get('flavors').setValidators([Validators.required]);
+      }
 
-    if (category === CategoryEnum.FruitIce) {
-      this.flavorForm.get('fruitContent').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-      this.flavorForm.get('fruits').setValidators(Validators.required);
-    } else {
-      this.flavorForm.get('fruitContent').clearValidators();
-      this.flavorForm.get('fruits').clearValidators();
-    }
-
-    if (category === CategoryEnum.WaterIce) {
-      this.flavorForm.get('flavors').setValidators(Validators.required);
-    } else {
-      this.flavorForm.get('flavors').clearValidators();
-    }
-
-    // Update the validators
-    this.flavorForm.updateValueAndValidity();
+      this.flavorForm.updateValueAndValidity();
+    });
   }
 
+  // Handler for form submission
   public onSubmit(): void {
     if (this.flavorForm.valid) {
       const formValue = this.flavorForm.value;
       const { name, category } = formValue;
-      const specifications = extractSpecifications(category, formValue);
+      const specifications: IIceCreamSpecifications = extractSpecifications(category, formValue);
 
       const model: IIceCreamFlavor = {
         id: this.numberOfExistingFlavors + 1,
         name,
         category,
-        specifications,
+        specifications
       };
 
-      this.iceCreamService.addIceCreamFlavor(model);
-      this.dialogRef.close();
+      this.addFlavor(model);
     } else {
       return;
     }
+  }
+
+  // Triggering service to add new flavor
+  private addFlavor = (model: IIceCreamFlavor) => {
+    this.iceCreamService.addIceCreamFlavor(model).subscribe({
+      next: () => {
+        this.dialogRef.close();
+        this.showToastMessage('success', 'Success', 'New flavor is just added.');
+      },
+      error: (err: string) => {
+        this.showToastMessage('error', 'Failed', err);
+      }
+    });
+  }
+
+  // Success toast message, triggered after new flavor is added
+  private showToastMessage = (severity: string, summary: string, detail: string) => {
+    this.messageService.add(
+      { life: 4000,
+        severity,
+        summary,
+        detail
+      }
+    );
   }
 
 }

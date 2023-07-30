@@ -6,7 +6,6 @@ import { SharedModule } from '../shared/shared.module';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [
     IceCreamListComponent,

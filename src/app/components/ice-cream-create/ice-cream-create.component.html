@@ -1,4 +1,8 @@
-<form [formGroup]="flavorForm" (ngSubmit)="onSubmit()" class="ice-cream-form">
+<form
+  [formGroup]="flavorForm"
+  (ngSubmit)="onSubmit()"
+  class="ice-cream-form"
+>
   <div class="form-field">
     <label for="name">Name</label>
     <input
@@ -19,7 +23,7 @@
       id="category"
       formControlName="category"
       [options]="categoryEnum"
-      [style.width]="'100%'"
+      [style]="{'width': '100%'}"
       [showClear]="true"
       placeholder="Select a category"
     >
@@ -62,7 +66,7 @@
       id="fruits"
       formControlName="fruits"
       [options]="availableFruits"
-      [style.width]="'100%'"
+      [style]="{'width': '100%'}"
       [showClear]="true"
       [filter]="false"
       placeholder="Choose fruits"
@@ -78,7 +82,7 @@
       id="flavors"
       formControlName="flavors"
       [options]="availableFlavors"
-      [style.width]="'100%'"
+      [style]="{'width': '100%'}"
       [showClear]="true" [filter]="false"
       placeholder="Choose flavors"
     ></p-multiSelect>
@@ -93,7 +97,7 @@
       id="ingredients"
       formControlName="ingredients"
       [options]="availableIngredients"
-      [style.width]="'100%'"
+      [style]="{'width': '100%'}"
       [showClear]="true"
       [filter]="false"
       placeholder="Choose ingredients"
@@ -117,7 +121,7 @@
   </div>
 
   <div class="form-field">
-    <label for="nutritionalValue">Nutritional Value</label>
+    <label for="nutritionalValue">Nutritional value</label>
     <input
       type="number"
       id="nutritionalValue"
@@ -126,12 +130,12 @@
       placeholder="In kcal / 100 g"
     />
     <small *ngIf="flavorForm.get('nutritionalValue').invalid && flavorForm.get('nutritionalValue').touched" class="error-msg">
-      Nutritional Value is required and should be a positive number.
+      Nutritional value is required and should be a positive number.
     </small>
   </div>
 
   <div class="form-field">
-    <label for="buyingPrice">Buying Price</label>
+    <label for="buyingPrice">Buying price</label>
     <input
       type="number"
       id="buyingPrice"
@@ -140,12 +144,12 @@
       placeholder="In Euro / 1 Liter"
     />
     <small *ngIf="flavorForm.get('buyingPrice').invalid && flavorForm.get('buyingPrice').touched" class="error-msg">
-      Buying Price is required and should be a positive number.
+      Buying price is required and should be a positive number.
     </small>
   </div>
 
   <div class="form-field">
-    <label for="sellingPrice">Selling Price</label>
+    <label for="sellingPrice">Selling price</label>
     <input
       type="number"
       id="sellingPrice"
@@ -154,7 +158,7 @@
       placeholder="In Euro / 1 Liter"
     />
     <small *ngIf="flavorForm.get('sellingPrice').invalid && flavorForm.get('sellingPrice').touched" class="error-msg">
-      Selling Price is required and should be a positive number.
+      Selling price is required and should be a positive number.
     </small>
   </div>
 
@@ -163,5 +167,5 @@
     type="submit"
     [disabled]="!flavorForm.valid"
     [style.width]="'120px'"
-  >Add Flavor</button>
+  >Add flavor</button>
 </form>

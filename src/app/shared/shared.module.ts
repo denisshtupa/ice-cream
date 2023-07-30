@@ -9,6 +9,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,6 @@ import { TagModule } from 'primeng/tag';
   ],
   exports: [
     FormatToGermanCurrPipe,
-
     TableModule,
     ButtonModule,
     TagModule,

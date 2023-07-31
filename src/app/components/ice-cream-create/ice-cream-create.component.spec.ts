@@ -57,37 +57,49 @@ describe('IceCreamCreateComponent', () => {
     expect(component.categoryEnum).toEqual(Object.values(CategoryEnum));
   });
 
-  it('should reset category fields on category change', () => {
+  it('should update validators for category "CreamIce"', () => {
+    component.flavorForm.patchValue({ category: CategoryEnum.CreamIce });
+    component.setValidatorsForCategory();
+
+    const creamContentControl = component.flavorForm.get('creamContent');
+    const fruitContentControl = component.flavorForm.get('fruitContent');
+    const fruitsControl = component.flavorForm.get('fruits');
+    const flavorsControl = component.flavorForm.get('flavors');
+
+    expect(creamContentControl.validator).toBeTruthy();
+    expect(fruitContentControl.validator).toBeNull();
+    expect(fruitsControl.validator).toBeNull();
+    expect(flavorsControl.validator).toBeNull();
+  });
+
+  it('should update validators for category "FruitIce"', () => {
     component.flavorForm.patchValue({ category: CategoryEnum.FruitIce });
-    component.resetCategoryFields();
-    expect(component.flavorForm.get('creamContent').value).toBeNull();
-    expect(component.flavorForm.get('fruitContent').value).toBeNull();
-    expect(component.flavorForm.get('fruits').value).toBeNull();
-    expect(component.flavorForm.get('flavors').value).toBeNull();
+    component.setValidatorsForCategory();
+
+    const creamContentControl = component.flavorForm.get('creamContent');
+    const fruitContentControl = component.flavorForm.get('fruitContent');
+    const fruitsControl = component.flavorForm.get('fruits');
+    const flavorsControl = component.flavorForm.get('flavors');
+
+    expect(creamContentControl.validator).toBeNull();
+    expect(fruitContentControl.validator).toBeTruthy();
+    expect(fruitsControl.validator).toBeTruthy();
+    expect(flavorsControl.validator).toBeNull();
   });
 
-  it('should set validators for category "CreamIce"', () => {
-    component.setValidatorsForCategory(CategoryEnum.CreamIce);
-    expect(component.flavorForm.get('creamContent').validator).toBeTruthy();
-    expect(component.flavorForm.get('fruitContent').validator).toBeNull();
-    expect(component.flavorForm.get('fruits').validator).toBeNull();
-    expect(component.flavorForm.get('flavors').validator).toBeNull();
-  });
+  it('should update validators for category "WaterIce"', () => {
+    component.flavorForm.patchValue({ category: CategoryEnum.WaterIce });
+    component.setValidatorsForCategory();
 
-  it('should set validators for category "FruitIce"', () => {
-    component.setValidatorsForCategory(CategoryEnum.FruitIce);
-    expect(component.flavorForm.get('creamContent').validator).toBeNull();
-    expect(component.flavorForm.get('fruitContent').validator).toBeTruthy();
-    expect(component.flavorForm.get('fruits').validator).toBeTruthy();
-    expect(component.flavorForm.get('flavors').validator).toBeNull();
-  });
+    const creamContentControl = component.flavorForm.get('creamContent');
+    const fruitContentControl = component.flavorForm.get('fruitContent');
+    const fruitsControl = component.flavorForm.get('fruits');
+    const flavorsControl = component.flavorForm.get('flavors');
 
-  it('should set validators for category "WaterIce"', () => {
-    component.setValidatorsForCategory(CategoryEnum.WaterIce);
-    expect(component.flavorForm.get('creamContent').validator).toBeNull();
-    expect(component.flavorForm.get('fruitContent').validator).toBeNull();
-    expect(component.flavorForm.get('fruits').validator).toBeNull();
-    expect(component.flavorForm.get('flavors').validator).toBeTruthy();
+    expect(creamContentControl.validator).toBeNull();
+    expect(fruitContentControl.validator).toBeNull();
+    expect(fruitsControl.validator).toBeNull();
+    expect(flavorsControl.validator).toBeTruthy();
   });
 
   it('should submit the form and add a new flavor', () => {

@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -13,7 +13,7 @@ import { extractSpecifications } from 'src/app/shared/helpers';
   templateUrl: './ice-cream-create.component.html',
   styleUrls: ['./ice-cream-create.component.scss']
 })
-export class IceCreamCreateComponent {
+export class IceCreamCreateComponent implements OnInit {
   public CategoryEnum = CategoryEnum; // Expose the CategoryEnum to the template
   public flavorForm: FormGroup;
   public categoryEnum = Object.values(CategoryEnum);
@@ -30,7 +30,10 @@ export class IceCreamCreateComponent {
     private config: DynamicDialogConfig,
     private messageService: MessageService
   ) {
-    this.numberOfExistingFlavors = config.data.existingFlavorsNumber;
+  }
+
+  ngOnInit() {
+    this.numberOfExistingFlavors = this.config.data.existingFlavorsNumber;
     this.initFlavorForm();
   }
 

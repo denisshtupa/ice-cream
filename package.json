@@ -1,12 +1,15 @@
 {
   "name": "ice-cream",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "clean-start": "bash clean-start.sh",
+    "create-deploy-branch": "bash create-deploy-branch.sh",
+    "deploy": "bash gh-deploy.sh"
   },
   "private": true,
   "dependencies": {

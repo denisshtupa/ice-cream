@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CategoryEnum } from 'src/app/enums/category.enum';
 import { IIceCreamFlavor } from 'src/app/interfaces/ice-cream.interface';
 import { IceCreamService } from 'src/app/services/ice-cream.service';
@@ -10,7 +10,7 @@ import { IceCreamCreateComponent } from '../ice-cream-create/ice-cream-create.co
   templateUrl: './ice-cream-list.component.html',
   styleUrls: ['./ice-cream-list.component.scss']
 })
-export class IceCreamListComponent {
+export class IceCreamListComponent implements OnInit{
   public CategoryEnum = CategoryEnum; // Expose the CategoryEnum to the template
   public iceCreamFlavors: IIceCreamFlavor[] = [];
 
@@ -22,7 +22,6 @@ export class IceCreamListComponent {
 
   ngOnInit() {
     this.iceCreamFlavors = this.iceCreamService.getAllIceCreamFlavors();
-
   }
 
   getCategorySeverity(status: CategoryEnum){

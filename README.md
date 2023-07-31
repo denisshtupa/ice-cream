@@ -1,6 +1,8 @@
 # IceCream
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.5.
+I have used PrimeNG as main UI library. It is a very powerful UI package to make things look better, meanwhile by saving effort and time.\
+For handling form better and providing some validations, i have used reactive forms. Regarding styling, i am relying on SCSS.
 
 Access from here [IceCream](https://denisshtupa.github.io/ice-cream/ice-cream) the version deployed on gh-pages 
 
@@ -21,4 +23,4 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).\
-14 test cases are built currently, for testing service and 2 components that hold the application logic.
+14 test cases are built currently, for testing service and 2 components(ice-cream-list & ice-cream-create) that hold the application logic.

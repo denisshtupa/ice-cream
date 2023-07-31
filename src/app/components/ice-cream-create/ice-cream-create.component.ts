@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -26,7 +26,6 @@ export class IceCreamCreateComponent implements OnInit {
     private dialogRef: DynamicDialogRef,
     private iceCreamService: IceCreamService,
     private formBuilder: FormBuilder,
-    private ngZone: NgZone,
     private config: DynamicDialogConfig,
     private messageService: MessageService
   ) {
@@ -55,45 +54,40 @@ export class IceCreamCreateComponent implements OnInit {
 
     this.flavorForm.get('category').valueChanges.subscribe({
       next: () => {
-        this.resetCategoryFields();
-      },
-      complete: () => {
-        const category = this.flavorForm.get('category').value;
-        this.setValidatorsForCategory(category);
+        this.setValidatorsForCategory();
       }
     });
-  }
-
-  // Resets all category related fields to initial state.
-  public resetCategoryFields(): void {
-    this.flavorForm.get('creamContent').reset();
-    this.flavorForm.get('fruitContent').reset();
-    this.flavorForm.get('fruits').reset();
-    this.flavorForm.get('flavors').reset();
   }
 
   // Updating validators in case of category change
-  public setValidatorsForCategory(category: CategoryEnum): void {
-    this.ngZone.run(() => {
-      if (category === CategoryEnum.CreamIce) {
-        this.flavorForm.get('creamContent').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-        this.flavorForm.get('fruitContent').setValidators(null)
-        this.flavorForm.get('fruits').setValidators(null);
-        this.flavorForm.get('flavors').setValidators(null);
-      } else if (category === CategoryEnum.FruitIce) {
-        this.flavorForm.get('creamContent').setValidators(null);
-        this.flavorForm.get('flavors').setValidators(null);
-        this.flavorForm.get('fruitContent').setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-        this.flavorForm.get('fruits').setValidators(Validators.required);
-      } else if (category === CategoryEnum.WaterIce) {
-        this.flavorForm.get('creamContent').setValidators(null);
-        this.flavorForm.get('fruitContent').setValidators(null);
-        this.flavorForm.get('fruits').setValidators(null);
-        this.flavorForm.get('flavors').setValidators([Validators.required]);
-      }
+  public setValidatorsForCategory(): void {
+    const category = this.flavorForm.get('category').value;
+    const creamContentControl = this.flavorForm.get('creamContent');
+    const fruitContentControl = this.flavorForm.get('fruitContent');
+    const fruitsControl = this.flavorForm.get('fruits');
+    const flavorsControl = this.flavorForm.get('flavors');
 
-      this.flavorForm.updateValueAndValidity();
-    });
+    if (category === CategoryEnum.CreamIce) {
+      creamContentControl.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      fruitContentControl.clearValidators();
+      fruitsControl.clearValidators();
+      flavorsControl.clearValidators();
+    } else if (category === CategoryEnum.FruitIce) {
+      creamContentControl.clearValidators();
+      fruitContentControl.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      fruitsControl.setValidators(Validators.required);
+      flavorsControl.clearValidators();
+    } else if (category === CategoryEnum.WaterIce) {
+      creamContentControl.clearValidators();
+      fruitContentControl.clearValidators();
+      fruitsControl.clearValidators();
+      flavorsControl.setValidators([Validators.required]);
+    }
+
+    creamContentControl.updateValueAndValidity();
+    fruitContentControl.updateValueAndValidity();
+    fruitsControl.updateValueAndValidity();
+    flavorsControl.updateValueAndValidity();
   }
 
   // Handler for form submission
@@ -129,7 +123,7 @@ export class IceCreamCreateComponent implements OnInit {
     });
   }
 
-  // Success toast message, triggered after new flavor is added
+  // Show toast message. Used when addIceCreamFlavor service is called
   private showToastMessage = (severity: string, summary: string, detail: string) => {
     this.messageService.add(
       { life: 4000,

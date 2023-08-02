@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
 import { CategoryEnum } from 'src/app/enums/category.enum';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { IIceCreamFlavor } from 'src/app/interfaces/ice-cream.interface';
 
 describe('IceCreamCreateComponent', () => {
   let component: IceCreamCreateComponent;
@@ -103,7 +104,7 @@ describe('IceCreamCreateComponent', () => {
   });
 
   it('should submit the form and add a new flavor', () => {
-    const newFlavor = {
+    const newFlavor: IIceCreamFlavor = {
       id: 6,
       name: 'Mint Chocolate Chip',
       category: CategoryEnum.CreamIce,
@@ -141,7 +142,7 @@ describe('IceCreamCreateComponent', () => {
   });
 
   it('should handle error when adding a flavor', () => {
-    const newFlavor = {
+    const newFlavor: IIceCreamFlavor = {
       id: 6,
       name: 'Mint Chocolate Chip',
       category: CategoryEnum.CreamIce,

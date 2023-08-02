@@ -14,7 +14,7 @@ describe('IceCreamService', () => {
 
   // Test for the getAllIceCreamFlavors method
   it('should return all ice cream flavors', () => {
-    const allFlavors = iceCreamService.getAllIceCreamFlavors();
+    const allFlavors: IIceCreamFlavor[] = iceCreamService.getAllIceCreamFlavors();
 
     expect(allFlavors.length).toBe(fakeIceCreamData.length);
     expect(allFlavors).toEqual(fakeIceCreamData);
@@ -39,7 +39,7 @@ describe('IceCreamService', () => {
     };
 
     iceCreamService.addIceCreamFlavor(newFlavor).subscribe(() => {
-      const allFlavors = iceCreamService.getAllIceCreamFlavors();
+      const allFlavors: IIceCreamFlavor[] = iceCreamService.getAllIceCreamFlavors();
 
       expect(allFlavors.length).toBe(fakeIceCreamData.length);
       expect(allFlavors).toContain(newFlavor);
